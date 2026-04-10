@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cinematic Experience</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial;
+    background:#000;
+    color:white;
+}
+
+/* 🎵 MUSIC */
+audio{display:none;}
+
+/* 🏠 HOME */
+#home{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:14px;
+    background:#0a0a0a;
+}
+
+/* 🎴 CARD */
+.card{
+    width:80%;
+    max-width:320px;
+    height:110px;
+    border-radius:15px;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    transition:0.4s;
+    border:2px solid transparent;
+}
+
+.card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:brightness(0.6);
+}
+
+.card span{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+/* ✨ glow */
+.active{
+    border-color:#00ffcc;
+    box-shadow:0 0 18px #00ffcc;
+}
+
+/* 🎬 SCENE */
+#scene{
+    display:none;
+    height:100vh;
+    background-size:cover;
+    background-position:center;
+    position:relative;
+}
+
+#overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+}
+
+#text{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:100%;
+    text-align:center;
+    font-size:20px;
+    line-height:1.8;
+}
+
+.line{
+    opacity:0;
+    animation:fadeUp 1.3s ease forwards;
+    margin:12px 0;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* 🎧 VOICE OVERLAY */
+#voiceOverlay{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.88);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+#voiceOverlay audio{
+    width:80%;
+    max-width:400px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
+<!-- 🏠 HOME -->
+<div id="home">
+
+<h2>Choose one 🤍</h2>
+
+<div class="card" onclick="openScene(1)">
+<img src="img1.jpg"><span>Thank you</span>
+</div>
+
+<div class="card" onclick="openScene(2)">
+<img src="img2.jpg"><span>Something I don’t say enough</span>
+</div>
+
+<div class="card" onclick="openScene(3)">
+<img src="img3.jpg"><span>Something that matters</span>
+</div>
+
+<div class="card" onclick="openScene(4)">
+<img src="img4.jpg"><span>That’s it</span>
+</div>
+
+<div class="card" onclick="openScene(5)">
+<img src="img5.jpg"><span>One Last Thing 🎙️</span>
+</div>
+
+</div>
+
+<!-- 🎬 SCENE -->
+<div id="scene">
+<div id="overlay"></div>
+<div id="text"></div>
+</div>
+
+<!-- 🎧 VOICE OVERLAY -->
+<div id="voiceOverlay">
+    <audio id="voice" controls></audio>
+</div>
+
+<script>
+
+const pause = 2800;
+
+/* 🎵 MUSIC START */
+document.addEventListener("click",()=>{
+    let m=document.getElementById("bgMusic");
+    m.volume=0.35;
+    m.play();
+},{once:true});
+
+
+/* 🧠 TEXT ENGINE */
+function showLines(lines, callback){
+
+    const box=document.getElementById("text");
+    box.innerHTML="";
+
+    let i=0;
+
+    function next(){
+        if(i>=lines.length){
+            setTimeout(()=>callback && callback(), 1500);
+            return;
+        }
+
+        const div=document.createElement("div");
+        div.className="line";
+        div.innerText=lines[i];
+
+        box.appendChild(div);
+
+        i++;
+        setTimeout(next,pause);
+    }
+
+    next();
+}
+
+
+/* 🎬 SCENES */
+function openScene(num){
+
+    document.getElementById("home").style.display="none";
+    document.getElementById("scene").style.display="block";
+
+    let scene=document.getElementById("scene");
+
+    let img="";
+    let lines=[];
+
+    if(num===1){
+        img="img1.jpg";
+        lines=[
+        "Thank you",
+        "For staying yesterday… even when you could’ve just gone to sleep.",
+        "For helping me… without making it feel like I was asking for too much.",
+        "For being there… in a way that just made everything lighter.",
+        "You didn’t have to do any of that…",
+        "But you did.",
+        "And I noticed… even if I didn’t say it right."
+        ];
+    }
+
+    if(num===2){
+        img="img2.jpg";
+        lines=[
+        "Something I don’t say enough",
+        "I like us more when things are simple between us.",
+        "When we’re just talking.",
+        "Not trying to win… not trying to prove something…",
+        "Just understanding each other.",
+        "I think we’re better like that…",
+        "And honestly… I miss that when it’s not there."
+        ];
+    }
+
+    if(num===3){
+        img="img3.jpg";
+        lines=[
+        "Something that matters to me",
+        "I don’t really care about arguments…",
+        "Or who’s right…",
+        "Or how things should be said…",
+        "I care about how we leave each conversation.",
+        "Whether we’re still okay… or something small stayed there.",
+        "Because with you… I actually care about that."
+        ];
+    }
+
+    if(num===4){
+        img="img4.jpg";
+        lines=[
+        "And I’ll always be someone who stands with you.",
+        "Not against you… not above you…",
+        "Just… with you.",
+        "",
+        "And I’ll try not to be the reason anything feels heavier on you…",
+        "Or the one that makes things more complicated than they already are.",
+        "",
+        "I’m on your side. 🤍"
+        ];
+    }
+
+    if(num===5){
+        img="img5.jpg";
+        lines=[
+        "And I don’t think I’ll ever really stop sending these…",
+        "not even if you told me.",
+        "👇"
+        ];
+    }
+
+    const preload=new Image();
+    preload.src=img;
+
+    preload.onload=()=>{
+
+        scene.style.display="block";
+        scene.style.backgroundImage="none";
+
+        setTimeout(()=>{
+            scene.style.backgroundImage=`url('${img}')`;
+        },50);
+
+        showLines(lines,()=>{
+
+            if(num === 5){
+
+                let music=document.getElementById("bgMusic");
+                music.pause();
+                music.currentTime=0;
+
+                let overlay=document.getElementById("voiceOverlay");
+                let voice=document.getElementById("voice");
+
+                voice.src="voice.mp3";
+                overlay.style.display="flex";
+                voice.play();
+
+            }else{
+                setTimeout(()=>{
+                    backHome();
+                },1500);
+            }
+
+            glow(num);
+        });
+    };
+}
+
+
+/* ✨ GLOW */
+function glow(num){
+    document.querySelectorAll(".card")[num-1].classList.add("active");
+}
+
+
+/* 🏠 BACK */
+function backHome(){
+    document.getElementById("scene").style.display="none";
+    document.getElementById("home").style.display="flex";
+}
+
+</script>
+
+</body>
+</html>
